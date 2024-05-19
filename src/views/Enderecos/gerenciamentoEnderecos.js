@@ -32,45 +32,45 @@ const GerenciamentoEnderecos = props => {
       .catch(error => console.log(error));
   }
 
-  // function handleCreate(newData) {
-  //   axios
-  //     .post("http://demo5814788.mockable.io/enderecos", {
-  //       "id": newData.id,
-  //       "cpf": newData.cpf,
-  //       "matricula": newData.matricula,
-  //       "nome": newData.nome,
-  //       "idEndereco": newData.idEndereco,
-  //       "curso": newData.curso
-  //     })
-  //     .then(function (response) {
-  //       console.log('Salvo com sucesso.')
-  //     });
-  // }
+  function handleCreate(newData) {
+    axios
+      .post("http://demo5814788.mockable.io/enderecos", {
+        "id": newData.id,
+        "cpf": newData.cpf,
+        "matricula": newData.matricula,
+        "nome": newData.nome,
+        "idEndereco": newData.idEndereco,
+        "curso": newData.curso
+      })
+      .then(function (response) {
+        console.log('Salvo com sucesso.')
+      });
+  }
 
-  // function handleUpdate(newData) {
-  //   axios
-  //     .put("http://demo5814788.mockable.io/enderecos", {
-  //       "id": newData.id,
-  //       "cpf": newData.cpf,
-  //       "matricula": newData.matricula,
-  //       "nome": newData.nome,
-  //       "idEndereco": newData.idEndereco,
-  //       "curso": newData.curso
-  //     })
-  //     .then(function (response) {
-  //       console.log('Atualizado com sucesso.')
-  //     });
-  // }
+  function handleUpdate(newData) {
+    axios
+      .put("http://demo5814788.mockable.io/enderecos", {
+        "id": newData.id,
+        "cpf": newData.cpf,
+        "matricula": newData.matricula,
+        "nome": newData.nome,
+        "idEndereco": newData.idEndereco,
+        "curso": newData.curso
+      })
+      .then(function (response) {
+        console.log('Atualizado com sucesso.')
+      });
+  }
 
-  // function handleDelete(newData) {
-  //   axios
-  //     .delete("http://demo5814788.mockable.io/enderecos", {
-  //       "id": newData.id
-  //     })
-  //     .then(function (response) {
-  //       console.log('Deletado com sucesso.')
-  //     });
-  // }
+  function handleDelete(newData) {
+    axios
+      .delete("http://demo5814788.mockable.io/enderecos", {
+        "id": newData.id
+      })
+      .then(function (response) {
+        console.log('Deletado com sucesso.')
+      });
+  }
 
   return (
     [
@@ -87,43 +87,43 @@ const GerenciamentoEnderecos = props => {
           { title: 'País', field: 'pais'}
         ]}
         data={data}
-        // editable={{
-        //   onRowAdd: newData =>
-        //     new Promise((resolve, reject) => {
-        //       setTimeout(() => {
-        //         handleCreate(newData)
+        editable={{
+          onRowAdd: newData =>
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                handleCreate(newData)
 
-        //         const dataCreate = [...data];
+                const dataCreate = [...data];
 
-        //         setData([...dataCreate, newData]);
+                setData([...dataCreate, newData]);
 
-        //         resolve();
-        //       }, 1000)
-        //     }),
-        //   onRowUpdate: (newData, oldData) =>
-        //     new Promise((resolve, reject) => {
-        //       setTimeout(() => {
-        //         const dataUpdate = [...data];
-        //         const index = oldData.tableData.id;
-        //         dataUpdate[index] = newData;
-        //         setData([...dataUpdate]);
+                resolve();
+              }, 1000)
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                const dataUpdate = [...data];
+                const index = oldData.tableData.id;
+                dataUpdate[index] = newData;
+                setData([...dataUpdate]);
 
-        //         resolve();
-        //       }, 1000)
-        //     }),
-        //   onRowDelete: oldData =>
-        //     new Promise((resolve, reject) => {
-        //       setTimeout(() => {
-        //         handleDelete(oldData)
-        //         const dataDelete = [...data];
-        //         const index = oldData.tableData.id;
-        //         dataDelete.splice(index, 1);
-        //         setData([...dataDelete]);
+                resolve();
+              }, 1000)
+            }),
+          onRowDelete: oldData =>
+            new Promise((resolve, reject) => {
+              setTimeout(() => {
+                handleDelete(oldData)
+                const dataDelete = [...data];
+                const index = oldData.tableData.id;
+                dataDelete.splice(index, 1);
+                setData([...dataDelete]);
 
-        //         resolve()
-        //       }, 1000)
-        //     }),
-        // }}
+                resolve()
+              }, 1000)
+            }),
+        }}
       />]
   )
 }
