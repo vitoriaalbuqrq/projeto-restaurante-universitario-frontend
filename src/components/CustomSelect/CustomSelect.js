@@ -8,7 +8,7 @@ const CustomSelect = ({ options, value, inputLabel, onChange, valueKey, labelKey
       <InputLabel>{inputLabel}</InputLabel>
       <Select value={value} onChange={onChange}>
         {options.map((option) => (
-          <MenuItem key={option[valueKey]} value={option[labelKey]}>
+          <MenuItem key={option[valueKey]} value={option[valueKey]}>
             {`${option[valueKey]} - ${option[labelKey]}`}
           </MenuItem>
         ))}
