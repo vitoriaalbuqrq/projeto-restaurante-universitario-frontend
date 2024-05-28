@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MaterialTable from "material-table";
 import CustomSelect from "components/CustomSelect/CustomSelect";
 
 const GerenciamentoAlunos = (props) => {
-  const { useState, useEffect } = React;
   const [enderecos, setEnderecos] = useState([]);
-
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -34,18 +32,13 @@ const GerenciamentoAlunos = (props) => {
   }
 
   function handleCreate(newData) {
-    const alunoData = {
-      cpf: newData.cpf,
-      matricula: newData.matricula,
-      nomeCompleto: newData.nomeCompleto,
-      enderecoId: newData.enderecoId,
-      curso: newData.curso,
-    };
     axios
-      .post("http://localhost:8080/alunos", alunoData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      .post("http://localhost:8080/alunos", {
+        "cpf": newData.cpf,
+        "matricula": newData.matricula,
+        "nomeCompleto": newData.nomeCompleto,
+        "enderecoId": newData.enderecoId,
+        "curso": newData.curso,
       })
       .then((response) => {
         console.log("Salvo com sucesso.");
@@ -58,15 +51,11 @@ const GerenciamentoAlunos = (props) => {
 
     axios
       .put(url, {
-        cpf: newData.cpf,
-        matricula: newData.matricula,
-        nomeCompleto: newData.nomeCompleto,
-        enderecoId: newData.enderecoId,
-        curso: newData.curso,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        "cpf": newData.cpf,
+        "matricula": newData.matricula,
+        "nomeCompleto": newData.nomeCompleto,
+        "enderecoId": newData.enderecoId,
+        "curso": newData.curso,
       })
       .then(function (response) {
         console.log("Atualizado com sucesso.");
@@ -76,14 +65,11 @@ const GerenciamentoAlunos = (props) => {
       });
   }
 
-
   function handleDelete(newData) {
     const url = `http://localhost:8080/alunos/${newData.id}`;
 
     axios
-      .delete(url, {
-        id: newData.id,
-      })
+      .delete(url)
       .then(function (response) {
         console.log("Deletado com sucesso.");
       });
@@ -94,7 +80,6 @@ const GerenciamentoAlunos = (props) => {
       .get("http://localhost:8080/enderecos")
       .then(response => {
         setEnderecos(response.data);
-        console.log(response.data.enderecos);
       })
       .catch(error => console.log(error));
   }

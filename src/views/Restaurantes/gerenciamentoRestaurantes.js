@@ -16,19 +16,19 @@ const GerenciamentoRestaurantes = props => {
 
   function handleClick() {
     axios
-      .get("http://demo9128764.mockable.io/restaurantes")
+      .get("http://localhost:8080/restaurantes")
       .then(response => {
-        const restaurantes = response.data.restaurantes.map(c => {
+        const restaurantes = response.data.map(c => {
           return {
             id: c.id,
-            nome_do_restaurante: c.nome_do_restaurante,
-            endereco: c.endereco.endereco || 'Endereço não informado',
-            pessoa_responsavel: c.pessoa_responsavel.nome || 'Responsável não informado',
-            capacidade_de_refeicoes: c.capacidade_de_refeicoes,
-            horario_de_atendimento_cafe_da_manha: c.horario_de_atendimento_cafe_da_manha,
-            horario_de_atendimento_almoco: c.horario_de_atendimento_almoco,
-            horario_de_atendimento_jantar: c.horario_de_atendimento_jantar,
-            dias_de_funcionamento: c.dias_de_funcionamento
+            nomeRestaurante: c.nomeRestaurante,
+            enderecoId: c.enderecoId || 'Endereço não informado',
+            pessoaResponsavelId: c.pessoaResponsavelId,
+            capacidadeRefeicao: c.capacidadeRefeicao,
+            horarioCafeDaManha: c.horarioCafeDaManha,
+            horarioAlmoco: c.horarioAlmoco,
+            horarioJantar: c.horarioJantar,
+            diasFuncionamento: c.diasFuncionamento
           };
         });
         setData(restaurantes);
@@ -38,44 +38,68 @@ const GerenciamentoRestaurantes = props => {
 
   function handleCreate(newData) {
     axios
-      .post("https://demo2582395.mockable.io/alunos", newData)
-      .then(function (response) {
-        console.log('Salvo com sucesso.')
-      });
+      .post("http://localhost:8080/restaurantes", {
+        "nomeRestaurante": newData.nomeRestaurante,
+        "enderecoId": newData.enderecoId,
+        "pessoaResponsavelId": newData.pessoaResponsavelId,
+        "capacidadeRefeicao": newData.capacidadeRefeicao,
+        "horarioCafeDaManha": newData.horarioCafeDaManha,
+        "horarioAlmoco": newData.horarioAlmoco,
+        "horarioJantar": newData.horarioJantar,
+        "diasFuncionamento": newData.diasFuncionamento,
+      })
+      .then((response) => {
+        console.log("Salvo com sucesso.");
+        handleClick(); 
+      })
   }
 
   function handleUpdate(newData) {
-    const url = `https://demo2582395.mockable.io/alunos/${newData.id}`;
+    const url = `http://localhost:8080/restaurantes/${newData.id}`;
 
     axios
-      .put(url, newData)
+      .put(url, {
+        "nomeRestaurante": newData.nomeRestaurante,
+        "enderecoId": newData.enderecoId,
+        "pessoaResponsavelId": newData.pessoaResponsavelId,
+        "capacidadeRefeicao": newData.capacidadeRefeicao,
+        "horarioCafeDaManha": newData.horarioCafeDaManha,
+        "horarioAlmoco": newData.horarioAlmoco,
+        "horarioJantar": newData.horarioJantar,
+        "diasFuncionamento": newData.diasFuncionamento,
+      })
       .then(function (response) {
         console.log('Atualizado com sucesso.')
+      })
+      .catch(function (error) {
+        console.error("Erro ao atualizar restaurante:", error);
       });
   }
 
   function handleDelete(newData) {
+    const url = `http://localhost:8080/restaurantes/${newData.id}`;
+
     axios
-      .delete("https://demo2582395.mockable.io/delete-aluno", { data: { id: newData.id } })
+      .delete(url)
       .then(function (response) {
-        console.log('Deletado com sucesso.')
+        console.log("Deletado com sucesso.");
       });
   }
 
   function handleFetchEnderecos() {
     axios
-      .get("http://demo5814788.mockable.io/enderecos")
+      .get("http://localhost:8080/enderecos")
       .then(response => {
-        setEnderecos(response.data.enderecos);
+        setEnderecos(response.data);
       })
       .catch(error => console.log(error));
   }
 
   function handleFetchPessoasResponsavel() {
     axios
-      .get("http://demo5814788.mockable.io/pessoaresponsavel")
+      .get("http://localhost:8080/pessoas")
       .then(response => {
-        setPessoasResponsaveis(response.data.pessoas_responsaveis);
+        setPessoasResponsaveis(response.data);
       })
       .catch(error => console.log(error));
   }
@@ -84,9 +108,9 @@ const GerenciamentoRestaurantes = props => {
     <MaterialTable
       title="Gerenciamento de Restaurantes"
       columns={[
-        { title: 'Id', field: 'id' },
-        { title: 'Nome do restaurante', field: 'nome_do_restaurante' },
-        { title: 'Endereço', field: 'endereco',
+        { title: 'Id', field: 'id', editable: "never" },
+        { title: 'Nome do restaurante', field: 'nomeRestaurante' },
+        { title: 'Endereço', field: 'enderecoId',
           editComponent: props => (
             <CustomSelect
               options={enderecos}
@@ -97,9 +121,9 @@ const GerenciamentoRestaurantes = props => {
               labelKey="rua"
             />
           ),
-          render: rowData => rowData.endereco,
+          render: rowData => `${rowData.enderecoId} - ${enderecos.find(endereco => endereco.id === rowData.enderecoId)?.rua}`,
         },
-        { title: 'Pessoa Responsável', field: 'pessoa_responsavel',
+        { title: 'Pessoa Responsável', field: 'pessoaResponsavelId',
           editComponent: props => (
             <CustomSelect
               options={pessoasResponsaveis}
@@ -110,13 +134,13 @@ const GerenciamentoRestaurantes = props => {
               labelKey="nome"
             />
           ),
-          render: rowData => rowData.pessoa_responsavel,
+          render: rowData => `${rowData.pessoaResponsavelId} - ${pessoasResponsaveis.find(pessoaresponsavel => pessoaresponsavel.id === rowData.pessoaResponsavelId)?.nome}`,
         },
-        { title: 'Capacidade de refeições', field: 'capacidade_de_refeicoes', type: 'numeric' },
-        { title: 'Horario café da manhã', field: 'horario_de_atendimento_cafe_da_manha' },
-        { title: 'Horario almoço', field: 'horario_de_atendimento_almoco' },
-        { title: 'Horario jantar', field: 'horario_de_atendimento_jantar' },
-        { title: 'Dias de funcionamento', field: 'dias_de_funcionamento' }
+        { title: 'Capacidade de refeições', field: 'capacidadeRefeicao', type: 'numeric' },
+        { title: 'Horario café da manhã', field: 'horarioCafeDaManha' },
+        { title: 'Horario almoço', field: 'horarioAlmoco' },
+        { title: 'Horario jantar', field: 'horarioJantar' },
+        { title: 'Dias de funcionamento', field: 'diasFuncionamento' }
       ]}
       data={data}
       editable={{
@@ -124,7 +148,8 @@ const GerenciamentoRestaurantes = props => {
           new Promise((resolve, reject) => {
             setTimeout(() => {
               handleCreate(newData)
-              setData(prevData => [...prevData, newData]);
+              const dataCreate = [...data];
+              setData([...dataCreate, newData]);
               resolve();
             }, 1000)
           }),
